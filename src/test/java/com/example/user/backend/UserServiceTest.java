@@ -33,7 +33,7 @@ public class UserServiceTest {
     @Test
     public void testRegisterUser() {
         UserDTO userDTO = new UserDTO();
-        userDTO.setAge(20);
+        userDTO.setAge(25);
         userDTO.setCountry("France");
 
         User user = new User();
@@ -50,17 +50,17 @@ public class UserServiceTest {
     @Test
     public void testGetUserById() {
         User user = new User();
-        user.setId("1");
+        user.setId(1L);
 
         UserDTO userDTO = new UserDTO();
-        userDTO.setId("1");
+        userDTO.setId(1L);
 
-        when(userRepository.findById("1")).thenReturn(Optional.of(user));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(userMapper.userToUserDTO(any(User.class))).thenReturn(userDTO);
 
-        Optional<UserDTO> result = userService.getUserById("1");
+        Optional<UserDTO> result = userService.getUserById(1L);
 
         assertTrue(result.isPresent());
-        assertEquals("1", result.get().getId());
+        assertEquals(1L, result.get().getId());
     }
 }

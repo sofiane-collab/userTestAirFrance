@@ -1,19 +1,25 @@
 
 package com.example.user.backend.controllers;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.user.backend.dto.UserDTO;
-import com.example.user.backend.mapper.UserMapper;
 import com.example.user.backend.services.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
-import java.util.Optional;
-
+@Tag(name="User")
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -21,16 +27,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    private UserMapper userMapper = UserMapper.INSTANCE;
-
     @PostMapping("/register")
-    @Operation(description = "register a new user")
+    @Operation(summary = "Register new user",
+    description = "register new details of user")
     public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO userDTO) {
         try {
-            long startTime = System.currentTimeMillis();
             UserDTO registeredUserDTO = userService.registerUser(userDTO);
-            long endTime = System.currentTimeMillis();
-            System.out.println("Processing time: " + (endTime - startTime) + "ms");
             return new ResponseEntity<>(registeredUserDTO, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -38,11 +40,10 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable String id) {
-        long startTime = System.currentTimeMillis();
+    @Operation(summary = "Get new user",
+    description = "Get new details of user")
+    public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
         Optional<UserDTO> userDTO = userService.getUserById(id);
-        long endTime = System.currentTimeMillis();
-        System.out.println("Processing time: " + (endTime - startTime) + "ms");
         return userDTO.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                       .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }

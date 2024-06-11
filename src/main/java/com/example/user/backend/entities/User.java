@@ -1,20 +1,31 @@
 package com.example.user.backend.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Data
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+
+@Data // it's enought for getters and setters (lombok) but i writted them just for testting in my local
 @Document(collection = "users")
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
-    @Id
-    private String id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
     private Integer age;
 	private String country;
-    private String preferredLanguage = "English"; // Champ optionnel avec valeur par défaut
+	
+	// Optional field with default value
+    private String preferredLanguage = "English"; 
     
 	public String getFirstName() {
 		return firstName;
@@ -53,10 +64,10 @@ public class User {
 		this.preferredLanguage = preferredLanguage;
 	}
 	
-    public String getId() {
+    public Long getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
     
