@@ -19,6 +19,11 @@ public class UserService {
 
     private UserMapper userMapper = UserMapper.INSTANCE;
 
+    /**
+     * registerUser
+     * @param userDTO
+     * @return
+     */
     public UserDTO registerUser(UserDTO userDTO) {
         User user = userMapper.userDTOToUser(userDTO);
         if (user != null && ((user.getAge() != null && user.getAge() <= 18) || !COUNTRY.equalsIgnoreCase(user.getCountry()))) {
@@ -28,6 +33,11 @@ public class UserService {
         return userMapper.userToUserDTO(savedUser);
     }
 
+    /**
+     * getUserById
+     * @param id
+     * @return
+     */
     public Optional<UserDTO> getUserById(Long id) {
         return userRepository.findById(id)
                 .map(userMapper::userToUserDTO);
