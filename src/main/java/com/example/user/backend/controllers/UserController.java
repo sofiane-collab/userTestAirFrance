@@ -32,7 +32,12 @@ public class UserController {
     description = "register new details of user")
     public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO userDTO) {
         try {
+        	//Start: use the logging aspect
+            long startTime = System.currentTimeMillis();
             UserDTO registeredUserDTO = userService.registerUser(userDTO);
+            long endTime = System.currentTimeMillis();
+            System.out.println("Processing time: " + (endTime - startTime) + "ms");
+            //End: use the logging aspect
             return new ResponseEntity<>(registeredUserDTO, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -43,7 +48,12 @@ public class UserController {
     @Operation(summary = "Get new user",
     description = "Get new details of user")
     public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
+    	//Start: use the logging aspect
+        long startTime = System.currentTimeMillis();
         Optional<UserDTO> userDTO = userService.getUserById(id);
+        long endTime = System.currentTimeMillis();
+        System.out.println("Processing time: " + (endTime - startTime) + "ms");     
+    	//End: use the logging aspect
         return userDTO.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                       .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
